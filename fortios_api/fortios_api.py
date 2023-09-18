@@ -57,6 +57,8 @@ class FortiGateAPI:
                     verify=False, timeout=20
                 )
                 for cookie in self.session.cookies:
+                    # TODO: this needs to be change to find both versions 
+                    # TODO: of the cookie name
                     # if cookie.name == 'ccsrftoken_443':  # this was added after 7.2
                     if cookie.name == 'ccsrftoken':  # this was working until 7.2
                         self.session.headers.update({'X-CSRFTOKEN': cookie.value[1:-1]})
@@ -73,6 +75,8 @@ class FortiGateAPI:
                 'https://' + self.fgt_ip + '/logout', verify=False, timeout=20
             )
         self.session.close()
+        self.fgt_session_object_with_auth_cookie = None
+        self.fgt_session_object_with_api_key_token = None
     
     def value_from_key_path(self, working_dictionary, key_path):
         """Extracts the value from a nested dictionary by following the key path.
